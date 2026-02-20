@@ -1,5 +1,5 @@
 /// @file   chaos.h
-/// @author __Roselle__, pigeon.hannah
+/// @author __roselle__, pigeon.hannah
 /// @date   2026-02-20
 /// @brief  A module that computes a chaotic permutation based on various
 ///         chaotic maps and an initial seed.

@@ -1,5 +1,5 @@
 /// @file   gilbert_curve.h
-/// @author __Roselle__, pigeon.hannah
+/// @author __roselle__, pigeon.hannah
 /// @date   2026-02-20
 /// @brief  A module that computes a generalized hilbert curve for an arbitrary
 ///         2-dimensional rectangle.

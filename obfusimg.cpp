@@ -1,5 +1,5 @@
 /// @file   obfusimg.cpp
-/// @author __Roselle__, pigeon.hannah
+/// @author __roselle__, pigeon.hannah
 /// @date   2026-02-20
 /// @brief  An application that obfuscates images by shuffling the pixels of the
 ///         image in a deterministic and invertible way.
