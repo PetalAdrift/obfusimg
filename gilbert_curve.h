@@ -23,7 +23,8 @@ inline int get_bit(int val, int bit);
 /// @cite   https://doi.org/10.1016/j.ipl.2007.08.034
 int get_compact_index(int x, int y, int w_prec, int h_prec);
 
-/// @brief  Function to generate the $g$ function for a given rectangle size.
+/// @brief  Function to compute the raw g function for a given rectangle size.
+///         This g function is not yet a permutation and needs to be normalized.
 /// @param  w   the width of the rectangle (int)
 /// @param  h   the height of the rectangle (int)
 /// @return a vector of integers representing the $g$ function, where the value 
