@@ -68,7 +68,7 @@ unsigned char* apply_permutation(
 ){
     size_t total = width * height * channels;  // size of pixels array
     unsigned char* new_pixels = new unsigned char[total];
-    for (size_t i = 0; i < width * height; i++) {
+    for (size_t i = 0; i < (size_t)width * height; i++) {
         for (int c = 0; c < channels; c++) {
             new_pixels[i * channels + c] = pixels[perm[i] * channels + c];
         }
@@ -85,6 +85,14 @@ int main(int argc, char* argv[]){
     string img_path = argv[1];
     int obfus_alg = std::stoi(argv[2]);
     double obfus_seed = std::stod(argv[3]);
+    
+    // verify file extension
+    size_t dot = img_path.find_last_of('.');
+    std::string ext = img_path.substr(dot + 1);
+    if (ext != "png" && ext != "jpg" && ext != "jpeg") {
+        std::cerr << "Unsupported format\n";
+        return 1;
+    }
 
     // image input
     int width, height, channels;
@@ -92,9 +100,8 @@ int main(int argc, char* argv[]){
         // read image as is, without forcing a specific number of channels (0)
         img_path.c_str(), &width, &height, &channels, 0
     );
-    size_t total = (size_t)width * height * channels;  // size of pixels array
     
-    unsigned char* new_pixels;
+    unsigned char* new_pixels = nullptr;
 
     switch(obfus_alg){
         case 0:{
@@ -142,14 +149,18 @@ int main(int argc, char* argv[]){
         );
         }
     }
+
+    if (new_pixels == nullptr) {
+        std::cerr << "Error: No obfuscation algorithm was applied.\n";
+        stbi_image_free(pixels);
+        return 2;
+    }
           
     // free memory
     stbi_image_free(pixels);
     
-    size_t dot = img_path.find_last_of('.');
-    std::string ext = img_path.substr(dot + 1);
+    // image output
     std::string out_name = img_path.substr(0, dot) + "_out." + ext;
-
     bool ok = false;
     if (ext == "png") {
         ok = stbi_write_png(
@@ -159,18 +170,15 @@ int main(int argc, char* argv[]){
         ok = stbi_write_jpg(
             out_name.c_str(), width, height, channels, new_pixels, 95
         );
-    } else {
-        std::cerr << "Unsupported format\n";
-        return 1;
     }
 
     if (!ok) {
         std::cerr << "Failed to write image\n";
-        return 2;
+        delete[] new_pixels;
+        return 3;
     }
 
     // free memory
     delete[] new_pixels;
-    
     return 0;
 }
