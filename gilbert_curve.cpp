@@ -11,6 +11,14 @@ int get_bit(int val, int bit) {
     return (val >> bit) & 1;
 }
 
+int sign(int x) {
+    return (x > 0) - (x < 0);
+}
+
+int floor_div2(int x) {
+    return x >= 0 ? x / 2 : (x - 1) / 2;
+}
+
 // this function is adapted from the original algorithm in the paper,
 // it is heavily modified by an LLM with C-style coding conventions
 int get_compact_index(int x, int y, int w_prec, int h_prec) {
@@ -70,7 +78,7 @@ int get_compact_index(int x, int y, int w_prec, int h_prec) {
     return h_c;
 }
 
-std::vector<int> generate_g_function(int w, int h) {
+std::vector<int> generate_compact_g_function(int w, int h) {
     int w_prec = std::ceil(std::log2(w)); // Bits needed for Width 
     int h_prec = std::ceil(std::log2(h)); // Bits needed for Height 
     
@@ -83,4 +91,91 @@ std::vector<int> generate_g_function(int w, int h) {
         }
     }
     return gc;
+}
+
+// this mimics the logic from https://xfqtphx.netlify.app/
+void draw_gilbert_curve(
+    int x, int y, int ax, int ay, int bx, int by, int img_width, 
+    std::vector<int>& coordinates
+) {
+    int w = std::abs(ax + ay);
+    int h = std::abs(bx + by);
+
+    int dax = sign(ax), day = sign(ay);
+    int dbx = sign(bx), dby = sign(by);
+
+    if (h == 1) {
+        // trivial row fill
+        for (int i = 0; i < w; ++i) {
+            coordinates.push_back(y * img_width + x);
+            x += dax;
+            y += day;
+        }
+        return;
+    }
+
+    if (w == 1) {
+        // trivial column fill
+        for (int i = 0; i < h; ++i) {
+            coordinates.push_back(y * img_width + x);
+            x += dbx;
+            y += dby;
+        }
+        return;
+    }
+
+    int ax2 = floor_div2(ax), ay2 = floor_div2(ay);
+    int bx2 = floor_div2(bx), by2 = floor_div2(by);
+
+    int w2 = std::abs(ax2 + ay2);
+    int h2 = std::abs(bx2 + by2);
+
+    if (2 * w > 3 * h) {
+        if ((w2 % 2 != 0) && (w > 2)) {
+            // prefer even steps
+            ax2 += dax;
+            ay2 += day;
+        }
+
+        // long case: split in two parts only
+        draw_gilbert_curve(
+            x, y, ax2, ay2, bx, by, img_width, coordinates
+        );
+        draw_gilbert_curve(
+            x + ax2, y + ay2, ax - ax2, ay - ay2, bx, by, img_width, coordinates
+        );
+
+    } else {
+        if ((h2 % 2 != 0) && (h > 2)) {
+            // Prefer even steps
+            bx2 += dbx;
+            by2 += dby;
+        }
+
+        // standard case: one step up, one long horizontal, one step down
+        draw_gilbert_curve(
+            x, y, bx2, by2, ax2, ay2, img_width, coordinates
+        );
+        draw_gilbert_curve(
+            x + bx2, y + by2, ax, ay, bx - bx2, by - by2, img_width, coordinates
+        );
+        draw_gilbert_curve(
+            x + (ax - dax) + (bx2 - dbx), y + (ay - day) + (by2 - dby), 
+            -bx2, -by2, -(ax - ax2), -(ay - ay2), img_width, coordinates
+        );
+    }
+}
+
+// this mimics the logic from https://xfqtphx.netlify.app/
+std::vector<int> generate_exact_g_function(int width, int height) {
+    std::vector<int> coordinates;
+    coordinates.reserve(width * height);
+
+    if (width >= height) {
+        draw_gilbert_curve(0, 0, width, 0, 0, height, width, coordinates);
+    } else {
+        draw_gilbert_curve(0, 0, 0, height, width, 0, width, coordinates);
+    }
+
+    return coordinates;
 }

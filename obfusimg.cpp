@@ -7,6 +7,8 @@
 #include <print>
 #include <iostream>
 #include <functional>
+#include <vector>
+#include <cmath>
 #include "gilbert_curve.h"
 #include "chaos.h"
 #include "stb_image.h"
@@ -41,6 +43,20 @@ std::vector<int> normalize_permutation(const std::vector<int>& perm) {
     }
 
     return normalized;
+}
+
+/// @brief  Function that computes a permutation by shifting a sequence a(n)
+///         such that a(n) lands in the position of a(n + shift).
+/// @param  seq     the original sequence to be shifted (std::vector<int>)
+/// @param  shift   the number of positions to shift the sequence (int)
+/// @return the shifted sequence as a permutation (std::vector<int>)
+std::vector<int> shift_sequence(const std::vector<int>& seq, int shift) {
+    int n = seq.size();
+    std::vector<int> shifted(n);
+    for (int i = 0; i < n; ++i) {
+        shifted[seq[(i + shift) % n]] = seq[i];  // forward shift
+    }
+    return shifted;
 }
 
 /// @brief  Function to invert a given permutation.
@@ -102,12 +118,15 @@ int main(int argc, char* argv[]){
     );
     
     unsigned char* new_pixels = nullptr;
+    // compute golden ratio-based offset for shift
+    int offset = std::round((std::sqrt(5.0) - 1.0) / 2.0 * width * height);
 
     switch(obfus_alg){
         case 0:{
-        // gilbert curve obfuscation
-        std::vector<int> g_func = generate_g_function(width, height);
+        // compact index gilbert curve obfuscation
+        std::vector<int> g_func = generate_compact_g_function(width, height);
         g_func = normalize_permutation(g_func);
+        g_func = shift_sequence(g_func, offset);
         new_pixels = apply_permutation(
             pixels, g_func, width, height, channels
         );
@@ -115,9 +134,10 @@ int main(int argc, char* argv[]){
         }
 
         case 1:{
-        // invert gilbert curve obfuscation
-        std::vector<int> g_func = generate_g_function(width, height);
+        // invert compact index gilbert curve obfuscation
+        std::vector<int> g_func = generate_compact_g_function(width, height);
         g_func = normalize_permutation(g_func);
+        g_func = shift_sequence(g_func, offset);
         std::vector<int> inv_g_func = invert_permutation(g_func);
         new_pixels = apply_permutation(
             pixels, inv_g_func, width, height, channels
@@ -126,6 +146,27 @@ int main(int argc, char* argv[]){
         }
 
         case 2:{
+        // exact gilbert curve obfuscation
+        std::vector<int> g_func = generate_exact_g_function(width, height);
+        g_func = shift_sequence(g_func, offset);
+        new_pixels = apply_permutation(
+            pixels, g_func, width, height, channels
+        );
+        break;
+        }
+
+        case 3:{
+        // invert exact gilbert curve obfuscation
+        std::vector<int> g_func = generate_exact_g_function(width, height);
+        g_func = shift_sequence(g_func, offset);
+        std::vector<int> inv_g_func = invert_permutation(g_func);
+        new_pixels = apply_permutation(
+            pixels, inv_g_func, width, height, channels
+        );
+        break;
+        }
+
+        case 4:{
         // chaos (tent map) obfuscation
         std::vector<int> chaotic_perm = generate_chaotic_permutation(
             width * height, obfus_seed, 
@@ -137,7 +178,7 @@ int main(int argc, char* argv[]){
         break;
         }
 
-        case 3:{
+        case 5:{
         // invert chaos (tent map) obfuscation
         std::vector<int> chaotic_perm = generate_chaotic_permutation(
             width * height, obfus_seed, 
