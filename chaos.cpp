@@ -7,7 +7,7 @@
 #include <algorithm>
 #include "chaos.h"
 
-double tent_map(double x, double mu = 2.0) {
+double tent_map(double x, double mu){
     if (x < 0.5) {
         return mu * x;
     } else {

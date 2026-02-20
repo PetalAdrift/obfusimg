@@ -8,9 +8,11 @@
 
 /// @brief  Computes the value of the tent map at a given point.
 /// @param  x   the input value, typically in the range [0, 1] (double)
-/// @param  mu  the parameter of the tent map, default is 2.0 (double)
+/// @param  mu  the parameter of the tent map,
+///             note that mu = 2.0 loses chaos after about 53 iterations due to 
+///             binary representation and should be avoided (double)
 /// @return the output value of the tent map (double)
-double tent_map(double x, double mu = 2.0);
+double tent_map(double x, double mu);
 
 /// @brief  Generates a chaotic permutation of integers from 0 to n-1 based on
 ///         the a chaotic map and an initial seed.
