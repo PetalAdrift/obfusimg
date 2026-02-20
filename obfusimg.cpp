@@ -6,7 +6,9 @@
 #include <string>
 #include <print>
 #include <iostream>
+#include <functional>
 #include "gilbert_curve.h"
+#include "chaos.h"
 #include "stb_image.h"
 #include "stb_image_write.h"
 using std::string;
@@ -82,7 +84,7 @@ int main(int argc, char* argv[]){
     // handle TUI arguments
     string img_path = argv[1];
     int obfus_alg = std::stoi(argv[2]);
-    double obfus_seed = std::stoi(argv[3]);
+    double obfus_seed = std::stod(argv[3]);
 
     // image input
     int width, height, channels;
@@ -93,20 +95,6 @@ int main(int argc, char* argv[]){
     size_t total = (size_t)width * height * channels;  // size of pixels array
     
     unsigned char* new_pixels;
-
-    auto g = generate_g_function(width, height);
-    g = normalize_permutation(g);
-    const int N = width * height;
-    if ((int)g.size() != N) {
-        std::cerr << "g_func size mismatch: " << g.size() << " vs " << N << "\n";
-        return 1;
-    }
-    for (int i = 0; i < N; ++i) {
-        if (g[i] < 0 || g[i] >= N) {
-            std::cerr << "g_func out of range at i=" << i << ": " << g[i] << "\n";
-            return 1;
-        }
-    }
 
     switch(obfus_alg){
         case 0:{
@@ -130,18 +118,33 @@ int main(int argc, char* argv[]){
         break;
         }
 
-        case 2:
-        // chaotic system permutation
+        case 2:{
+        // chaos (tent map) obfuscation
+        std::vector<int> chaotic_perm = generate_chaotic_permutation(
+            width * height, obfus_seed, 
+            [](double x){return tent_map(x, 1.9999);}  // use mu \approx 2
+        );
+        new_pixels = apply_permutation(
+            pixels, chaotic_perm, width, height, channels
+        );
         break;
+        }
 
-        case 3:
-        // invert chaotic system permutation
-        break;
+        case 3:{
+        // invert chaos (tent map) obfuscation
+        std::vector<int> chaotic_perm = generate_chaotic_permutation(
+            width * height, obfus_seed, 
+            [](double x){return tent_map(x, 1.9999);}
+        );
+        std::vector<int> inv_chaotic_perm = invert_permutation(chaotic_perm);
+        new_pixels = apply_permutation(
+            pixels, inv_chaotic_perm, width, height, channels
+        );
+        }
     }
           
     // free memory
     stbi_image_free(pixels);
-
     
     size_t dot = img_path.find_last_of('.');
     std::string ext = img_path.substr(dot + 1);
@@ -158,7 +161,16 @@ int main(int argc, char* argv[]){
         );
     } else {
         std::cerr << "Unsupported format\n";
+        return 1;
     }
+
+    if (!ok) {
+        std::cerr << "Failed to write image\n";
+        return 2;
+    }
+
+    // free memory
+    delete[] new_pixels;
     
     return 0;
 }
