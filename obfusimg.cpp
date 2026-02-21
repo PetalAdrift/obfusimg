@@ -47,6 +47,7 @@ int main(int argc, char* argv[]){
         // compact index gilbert curve obfuscation
         std::vector<int> g_func = generate_compact_g_function(width, height);
         g_func = normalize_permutation(g_func);
+        g_func = invert_permutation(g_func);  // invert to get actual g function
         new_pixels = apply_permutation(
             pixels, g_func, width, height, channels
         );
@@ -56,8 +57,7 @@ int main(int argc, char* argv[]){
         case 1:{
         // invert compact index gilbert curve obfuscation
         std::vector<int> g_func = generate_compact_g_function(width, height);
-        g_func = normalize_permutation(g_func);
-        std::vector<int> inv_g_func = invert_permutation(g_func);
+        std::vector<int> inv_g_func = normalize_permutation(g_func);
         new_pixels = apply_permutation(
             pixels, inv_g_func, width, height, channels
         );

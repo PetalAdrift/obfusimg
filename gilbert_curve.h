@@ -37,7 +37,7 @@ int floor_div2(int x);
 int get_compact_index(int x, int y, int w_prec, int h_prec);
 
 /// @brief  Function to compute the compact g function for a given rectangle.
-///         This g function needs to be normalized.
+///         This g function needs to be normalized and inverted.
 /// @param  w   the width of the rectangle (int)
 /// @param  h   the height of the rectangle (int)
 /// @return a vector of integers representing the $g$ function, where the value 
@@ -73,6 +73,6 @@ void draw_gilbert_curve(
 /// @param  w   the width of the rectangle (int)
 /// @param  h   the height of the rectangle (int)
 /// @return a vector of integers representing the $g$ function, where the value 
-///         at index $i$ is the Compact Hilbert Index of the point corresponding 
-///         to the original index $i$ in row-major order (std::vector<int>)
+///         at index $i$ is the row-major index of the $i$-th point in the exact
+///         Gilbert curve (std::vector<int>)
 std::vector<int> generate_exact_g_function(int width, int height);
