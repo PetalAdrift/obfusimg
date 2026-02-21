@@ -96,7 +96,7 @@ Invertible image obfuscation has a wide range of applications, from privacy-pres
 
 A relatively straightforward approach to obfuscation is by rearranging all the pixels in a given image. Each pixels is moved to a unique new position following a certain method such that the output is an image of the same dimensions (width, lengths, number of channels) but hardly recognizable (see Figure~\ref{fig:rearranging_pixels_is_effective}).
 
-\begin{figure}
+\begin{figure}[b!]
     \centering
     \begin{subfigure}[t]{0.5\textwidth}
         \centering
@@ -167,7 +167,7 @@ A generalized Hilbert curve (Gilbert curve) for a $w$-by-$h$ rectangle is a gene
 \end{equation}
 which we could use as our desired permutation $\sigma$.
 
-\begin{figure}
+\begin{figure}[t!]
 \centering
 \input{figures/gilbert_curve.tikz}
 \caption{An example of a Gilbert curve for a $4$-by-$4$ rectangle. The gray numerals represent the original indices and the black numerals represent the rearranged indices. In other words, $g(\text{black}) = \text{gray}$. Note that the Gilbert curve here is slightly different from the actual Gilbert curve implemented in \texttt{gilbert\_curve.cpp}.}

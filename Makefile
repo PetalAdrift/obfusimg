@@ -13,6 +13,7 @@ CXXFLAGS = -std=c++23 -O3 -Wall
 LDFLIBS = -lstdc++exp
 DOC_DIR = doc
 DOC = obfusimg-doc
+DOC_ZH = obfusimg-doc-zh
 TEXFLAGS = -cd -xelatex -interaction=nonstopmode -halt-on-error
 
 all: obfusimg$(EXE) doc
@@ -41,14 +42,19 @@ stb_image_write.o: stb_image_write.cpp stb_image_write.h
 $(DOC_DIR)/$(DOC).pdf: $(DOC_DIR)/$(DOC).tex
 	latexmk $(TEXFLAGS) $(DOC_DIR)/$(DOC).tex
 
-doc: $(DOC_DIR)/$(DOC).pdf
+$(DOC_DIR)/$(DOC_ZH).pdf: $(DOC_DIR)/$(DOC_ZH).tex
+	latexmk $(TEXFLAGS) $(DOC_DIR)/$(DOC_ZH).tex
+
+doc: $(DOC_DIR)/$(DOC).pdf $(DOC_DIR)/$(DOC_ZH).pdf
 
 clean:
 	-$(RM) *.o
 	latexmk -cd -c $(DOC_DIR)/$(DOC).tex
+	latexmk -cd -c $(DOC_DIR)/$(DOC_ZH).tex
 
 distclean: clean
 	-$(RM) obfusimg$(EXE)
 	latexmk -cd -C $(DOC_DIR)/$(DOC).tex
+	latexmk -cd -C $(DOC_DIR)/$(DOC_ZH).tex
 
 .PHONY: all clean distclean doc
