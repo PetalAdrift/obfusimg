@@ -62,6 +62,7 @@ std::vector<int> generate_compact_g_function(int w, int h);
 /// @param  img_width   the total width of the image, used to compute 1D indices
 ///                     from 2D coordinates (int)
 /// @param  coordinates reference to the output vector (std::vector<int>)
+/// @cite   https://github.com/jakubcerveny/gilbert/
 void draw_gilbert_curve(
     int x, int y, int ax, int ay, int bx, int by, int img_width, 
     std::vector<int>& coordinates

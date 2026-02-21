@@ -93,7 +93,6 @@ std::vector<int> generate_compact_g_function(int w, int h) {
     return gc;
 }
 
-// this mimics the logic from https://xfqtphx.netlify.app/
 void draw_gilbert_curve(
     int x, int y, int ax, int ay, int bx, int by, int img_width, 
     std::vector<int>& coordinates
@@ -166,7 +165,6 @@ void draw_gilbert_curve(
     }
 }
 
-// this mimics the logic from https://xfqtphx.netlify.app/
 std::vector<int> generate_exact_g_function(int width, int height) {
     std::vector<int> coordinates;
     coordinates.reserve(width * height);
