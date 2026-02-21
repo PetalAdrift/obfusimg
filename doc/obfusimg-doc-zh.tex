@@ -149,7 +149,7 @@
 
 在 \texttt{obfusimg} 中实现的每种算法本质上都是一个映射
 \begin{equation}
-    \alpha\colon \mathcal{I} \times [0, 1) \to \mathcal{P}, (I, s) \to \sigma
+    \alpha\colon \mathcal{I} \times [0, 1) \to \mathcal{P}, (I, s) \mapsto \sigma
 \end{equation}
 其中 $\mathcal{I}$ 是所有图像的集合，$\mathcal{P}$ 是所有有限集合置换的集合，$I = (w, h, c, A)$ 是用户输入图像，$s \in [0, 1)$ 是用户定义的种子（seed），而 $\sigma$ 是集合 $\{0, 1, \ldots, w h - 1\}$ 上的一个置换。实际中，$\alpha(I, s)$ 几乎从不依赖于 $c$ 和 $A$，因为 $c$ 的变化很小，而对于 \texttt{jpeg} 文件来说，$A$ 又容易受到有损压缩影响。
 
