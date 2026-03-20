@@ -10,7 +10,7 @@ endif
 
 CXX = g++
 CXXFLAGS = -std=c++23 -O3 -Wall
-LDFLIBS = -lstdc++exp
+LDLIBS = -lstdc++exp
 DOC_DIR = doc
 DOC = obfusimg-doc
 DOC_ZH = obfusimg-doc-zh
@@ -19,25 +19,25 @@ TEXFLAGS = -cd -xelatex -interaction=nonstopmode -halt-on-error
 all: obfusimg$(EXE) doc
 
 obfusimg$(EXE): obfusimg.o permutation.o gilbert_curve.o chaos.o stb_image.o stb_image_write.o
-	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLIBS)
+	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDLIBS)
 
 obfusimg.o: obfusimg.cpp permutation.h gilbert_curve.h chaos.h stb_image.h stb_image_write.h
-	$(CXX) $(CXXFLAGS) -c -o $@ $< $(LDFLIBS)
+	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
 permutation.o: permutation.cpp permutation.h
-	$(CXX) $(CXXFLAGS) -c -o $@ $< $(LDFLIBS)
+	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
 gilbert_curve.o: gilbert_curve.cpp gilbert_curve.h
-	$(CXX) $(CXXFLAGS) -c -o $@ $< $(LDFLIBS)
+	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
 chaos.o: chaos.cpp chaos.h
-	$(CXX) $(CXXFLAGS) -c -o $@ $< $(LDFLIBS)
+	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
 stb_image.o: stb_image.cpp stb_image.h
-	$(CXX) $(CXXFLAGS) -c -o $@ $< $(LDFLIBS)
+	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
 stb_image_write.o: stb_image_write.cpp stb_image_write.h
-	$(CXX) $(CXXFLAGS) -c -o $@ $< $(LDFLIBS)
+	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
 $(DOC_DIR)/$(DOC).pdf: $(DOC_DIR)/$(DOC).tex
 	latexmk $(TEXFLAGS) $(DOC_DIR)/$(DOC).tex
