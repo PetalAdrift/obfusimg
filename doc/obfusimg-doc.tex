@@ -151,7 +151,7 @@ Each algorithm implemented in \texttt{obfusimg} is essentially a map
 \begin{equation}
     \alpha\colon \mathcal{I} \times [0, 1) \to \mathcal{P}, (I, s) \mapsto \sigma
 \end{equation}
-where $\mathcal{I}$ is the set of all images, $\mathcal{P}$ is the set of all permutations of finite sets, $I = (w, h, c, A)$ is a user-input image, $s \in [0, 1)$ is a user-defined seed, and $\sigma$ is a permutation of the set $\{0, 1, \ldots, w h - 1\}$. In practice, $\alpha(I, s)$ almost never depend on $c$ and $A$ since $c$ has little variability and $A$ is prone to compression loss for \texttt{jpeg} files.
+where $\mathcal{I}$ is the set of all images, $\mathcal{P}$ is the set of all permutations of finite sets, $I = (w, h, c, A)$ is a user-input image, $s \in [0, 1)$ is a user-defined seed, and $\sigma$ is a permutation of the set $\{0, 1, \ldots, w h - 1\}$. In practice, $\alpha(I, s)$ almost never depends on $c$ and $A$ since $c$ has little variability and $A$ is prone to compression loss for \texttt{jpeg} files.
 
 \subsection{G/Hilbert curves}
 
