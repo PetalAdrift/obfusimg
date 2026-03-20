@@ -10,8 +10,9 @@ TL;DR: This application takes an image (and sometimes a seed/password) and makes
 
 ## How-To
 
-With `GCC` or other C++ compilers installed, you simply need to clone the repo and call `make all` in the directory. (I used MSYS2 MINGW64 on my local machine. [![works on my machine badge](https://cdn.jsdelivr.net/gh/nikku/works-on-my-machine@v0.4.0/badge.svg)](https://github.com/nikku/works-on-my-machine)) (Windows users need an additional step of installing [Make for Windows](https://gnuwin32.sourceforge.net/packages/make.htm) and adding it to the system PATH.)
+* With `GCC` or other C++ compilers installed, you simply need to clone the repo and call `make all` in the directory.
 
-The syntax for the actual software is `./obfusimg(.exe) path/to/image algorithm_id algorithm_seed`.
-
-Alternatively, you may choose to use the [web-version](https://obfusimg.netlify.app/).
+    * [![works on my machine badge](https://cdn.jsdelivr.net/gh/nikku/works-on-my-machine@v0.4.0/badge.svg)](https://github.com/nikku/works-on-my-machine)
+    * I used MSYS2 MINGW64 on my local Windows machine. Windows users also need an additional step of installing [Make for Windows](https://gnuwin32.sourceforge.net/packages/make.htm) and adding it to the system PATH.
+* The syntax for the actual software is `./obfusimg(.exe) path/to/image algorithm_id algorithm_seed`.
+* Alternatively, you may choose to use the [web-version](https://obfusimg.netlify.app/).
